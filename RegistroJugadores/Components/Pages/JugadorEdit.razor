@@ -1,0 +1,67 @@
+﻿@page "/Edit/{JugadorId:int}"
+
+@inject JugadoresService jugadoresService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Editar Jugador</PageTitle>
+<EditForm Model="Jugador" OnValidSubmit="Modificar">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<div class="container">
+		<div class="card shadow-lg">
+			<div class="card-header text-center">
+				<h5 class="card-title">Editar Jugador</h5>
+			</div>
+
+			<div class="card-body">
+				<div class="mb-3">
+					<label class="form-label"><strong>PrestamoId</strong></label>
+					<InputNumber class="form-control" @bind-Value="Jugador.JugadorId" readonly />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label"><strong>Nombres</strong></label>
+					<InputText class="form-control" @bind-Value="Jugador.Nombres" />
+					<ValidationMessage For="@(() => Jugador.Nombres)" />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label"><strong>Partidas</strong></label>
+					<InputNumber class="form-control" @bind-Value="Jugador.Partidas" />
+					<ValidationMessage For="@(() => Jugador.Partidas)" />
+				</div>
+			</div>
+
+			<div class="card-footer text-center mt-2">
+				<a href="/" class="btn btn-secondary">Cancelar</a>
+				<button type="submit" class="btn btn-primary">Modificar</button>
+			</div>
+		</div>
+	</div>
+</EditForm>
+@code {
+
+	[Parameter]
+	public int JugadorId { get; set; }
+
+	public Jugadores Jugador { get; set; } = new Jugadores();
+
+	protected async override Task OnInitializedAsync()
+	{
+		Jugador = await jugadoresService.Buscar(JugadorId);
+	}
+
+	public async Task Modificar()
+	{
+		var modificado = await jugadoresService.Modificar(Jugador);
+		if (modificado)
+		{
+			navigationManager.NavigateTo("/");
+		}
+		else
+		{
+		}
+	}
+}
