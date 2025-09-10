@@ -37,6 +37,5 @@ public class Contexto : DbContext
                   .HasForeignKey(p => p.TurnoJugadorId)
                   .OnDelete(DeleteBehavior.Restrict);
         });
-    
     }
 }

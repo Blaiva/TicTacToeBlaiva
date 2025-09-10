@@ -10,14 +10,16 @@
 
 	<div class="container">
 		<div class="card shadow-lg">
+			@*Header*@
 			<div class="card-header text-center">
 				<h5 class="card-title">Crear Jugador</h5>
 			</div>
 
+			@*Body*@
 			<div class="card-body">
 
 				<div class="mb-3">
-					<label class="form-label"><strong>PrestamoId</strong></label>
+					<label class="form-label"><strong>JugadorId</strong></label>
 					<InputNumber class="form-control" @bind-Value="Jugador.JugadorId" readonly/>
 				</div>
 
@@ -32,11 +34,22 @@
 					<InputNumber class="form-control" @bind-Value="Jugador.Partidas" />
 					<ValidationMessage For="@(() => Jugador.Partidas)" />
 				</div>
+
+				@if(!string.IsNullOrEmpty(AlertMessage))
+				{
+					<div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
+						<div>@AlertMessage</div>
+					</div>
+				}
 			</div>
 
+			@*Footer*@
 			<div class="card-footer text-center mt-2">
-				<a href="/" class="btn btn-secondary">Cancelar</a>
-				<button type="submit" class="btn btn-primary">Guardar</button>
+				<a href="/" class="btn btn-secondary">Volver</a>
+				@if(!(AlertType == "success"))
+				{
+					<button type="submit" class="btn btn-primary">Guardar</button>
+				}
 			</div>
 		</div>
 	</div>
@@ -45,6 +58,8 @@
 @code {
 	public Jugadores Jugador { get; set; } = new Jugadores();
 	public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+	public string AlertMessage { get; set; }
+	public string AlertType { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -56,11 +71,13 @@
 		var creado = await jugadoresService.Guardar(Jugador);
 		if (creado)
 		{
-			navigationManager.NavigateTo("/");
+			AlertMessage = "Jugador creado exitosamente.";
+			AlertType = "success";
 		}
 		else
 		{
-			
+			AlertMessage = "Error al crear el jugador.";
+			AlertType = "danger";
 		}
 	}
 }
