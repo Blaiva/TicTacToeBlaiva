@@ -1,6 +1,6 @@
-using RegistroJugadores.Components;
-using RegistroJugadores.DAL;
-using RegistroJugadores.Services;
+using TicTacToeBlaiva.Components;
+using TicTacToeBlaiva.DAL;
+using TicTacToeBlaiva.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,7 @@
-﻿using RegistroJugadores.Models;
+﻿using TicTacToeBlaiva.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace RegistroJugadores.DAL
+namespace TicTacToeBlaiva.DAL
 {
     public class Contexto : DbContext
     {

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-
-namespace RegistroJugadores.Models
+namespace TicTacToeBlaiva.Models
 {
     public class Jugadores
     {

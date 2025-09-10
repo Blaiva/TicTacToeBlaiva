@@ -1,9 +1,9 @@
-﻿using RegistroJugadores.DAL;
-using RegistroJugadores.Models;
+﻿using TicTacToeBlaiva.DAL;
+using TicTacToeBlaiva.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace RegistroJugadores.Services
+namespace TicTacToeBlaiva.Services
 {
     public class JugadoresService(IDbContextFactory<Contexto> DbFactory)
     {
