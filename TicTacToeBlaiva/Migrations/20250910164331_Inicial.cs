@@ -2,34 +2,33 @@
 
 #nullable disable
 
-namespace TicTacToeBlaiva.Migrations
+namespace TicTacToeBlaiva.Migrations;
+
+/// <inheritdoc />
+public partial class Inicial : Migration
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
-                name: "Jugadores",
-                columns: table => new
-                {
-                    JugadorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombres = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Partidas = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jugadores", x => x.JugadorId);
-                });
-        }
+        migrationBuilder.CreateTable(
+            name: "Jugadores",
+            columns: table => new
+            {
+                JugadorId = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
+                Nombres = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                Partidas = table.Column<int>(type: "int", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Jugadores", x => x.JugadorId);
+            });
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Jugadores");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            name: "Jugadores");
     }
 }

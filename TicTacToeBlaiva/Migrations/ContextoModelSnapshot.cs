@@ -7,40 +7,39 @@ using TicTacToeBlaiva.DAL;
 
 #nullable disable
 
-namespace TicTacToeBlaiva.Migrations
+namespace TicTacToeBlaiva.Migrations;
+
+[DbContext(typeof(Contexto))]
+partial class ContextoModelSnapshot : ModelSnapshot
 {
-    [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    protected override void BuildModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+        modelBuilder
+            .HasAnnotation("ProductVersion", "9.0.9")
+            .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+        SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TicTacToeBlaiva.Models.Jugadores", b =>
-                {
-                    b.Property<int>("JugadorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("TicTacToeBlaiva.Models.Jugadores", b =>
+            {
+                b.Property<int>("JugadorId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JugadorId"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JugadorId"));
 
-                    b.Property<string>("Nombres")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Nombres")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Partidas")
-                        .HasColumnType("int");
+                b.Property<int>("Partidas")
+                    .HasColumnType("int");
 
-                    b.HasKey("JugadorId");
+                b.HasKey("JugadorId");
 
-                    b.ToTable("Jugadores");
-                });
+                b.ToTable("Jugadores");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }

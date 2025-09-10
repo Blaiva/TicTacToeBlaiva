@@ -8,10 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+//Inyección del Contexto
 var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
-
 builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 
+//Inyección del Service
 builder.Services.AddScoped<JugadoresService>();
 
 var app = builder.Build();
