@@ -46,12 +46,14 @@
 
 			@*Footer*@
 			<div class="card-footer text-center mt-2">
-				<a href="/" class="btn btn-secondary">Cancelar</a>
-				@if(!(AlertType == "success"))
-				{
-					<button type="submit" class="btn btn-primary" @onclick="Modificar">Modificar</button>
-					<button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
-				}
+				<div class="btn-group">
+					@if (!(AlertType == "success"))
+					{
+						<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
+						<button type="button" class="btn btn-outline-danger bi bi-trash-fill" @onclick="Eliminar"> Eliminar</button>
+					}
+					<a href="/" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
+				</div>
 			</div>
 		</div>
 	</div>

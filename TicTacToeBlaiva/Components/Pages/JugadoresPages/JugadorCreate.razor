@@ -45,11 +45,13 @@
 
 			@*Footer*@
 			<div class="card-footer text-center mt-2">
-				<a href="/" class="btn btn-secondary">Volver</a>
-				@if(!(AlertType == "success"))
-				{
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				}
+				<div class="btn-group">
+					@if (!(AlertType == "success"))
+					{
+						<button type="submit" class="btn btn-outline-success bi bi-check-circle"> Guardar</button>
+					}
+					<a href="/" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
+				</div>
 			</div>
 		</div>
 	</div>
