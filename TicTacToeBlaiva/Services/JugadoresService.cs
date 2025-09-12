@@ -39,9 +39,14 @@ public class JugadoresService(IDbContextFactory<Contexto> DbFactory)
 
     public async Task<bool> Modificar(Jugadores jugador)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
-        contexto.Update(jugador);
-        return await contexto.SaveChangesAsync() > 0;
+        if (!await ExisteNombres(jugador.Nombres))
+        {
+            await using var contexto = await DbFactory.CreateDbContextAsync();
+            contexto.Update(jugador);
+            return await contexto.SaveChangesAsync() > 0;
+        }
+        else
+            return false;
     }
 
     public async Task<bool> Eliminar(int jugadorId)

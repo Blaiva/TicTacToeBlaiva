@@ -30,9 +30,14 @@ public class PartidasService (IDbContextFactory<Contexto> DbFactory)
 
     public async Task<bool> Modificar(Partidas partida)
     {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
-        contexto.Update(partida);
-        return await contexto.SaveChangesAsync() > 0;
+        if(partida.Jugador1Id != partida.Jugador2Id)
+        {
+            await using var contexto = await DbFactory.CreateDbContextAsync();
+            contexto.Update(partida);
+            return await contexto.SaveChangesAsync() > 0;
+        }
+        else
+            return false;
     }
 
     public async Task<bool> Eliminar(int partidaId)
