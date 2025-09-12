@@ -11,5 +11,6 @@ public class Jugadores
     public string Nombres { get; set; } = null!;
 
     [Required(ErrorMessage = "Este campo es obligatorio")]
+    [Range(0, int.MaxValue)]
     public int Partidas { get; set; }
 }
