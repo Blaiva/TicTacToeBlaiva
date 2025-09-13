@@ -88,16 +88,25 @@
 
 	public async Task Eliminar()
 	{
-		var eliminado = await jugadoresService.Eliminar(JugadorId);
-		if (eliminado)
+		try
 		{
-			AlertMessage = "Jugador eliminado correctamente.";
-			AlertType = "success";
+			var eliminado = await jugadoresService.Eliminar(JugadorId);
+			if (eliminado)
+			{
+				AlertMessage = "Jugador eliminado correctamente.";
+				AlertType = "success";
+			}
+			else
+			{
+				AlertMessage = "Error al eliminar el jugador.";
+				AlertType = "danger";
+			}
 		}
-		else
+		catch(Exception e)
 		{
-			AlertMessage = "Error al eliminar el jugador.";
+			AlertMessage = e.Message;
 			AlertType = "danger";
 		}
+
 	}
 }

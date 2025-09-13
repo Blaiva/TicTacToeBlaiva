@@ -59,14 +59,8 @@
 
 @code {
 	public Jugadores Jugador { get; set; } = new Jugadores();
-	public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
 	public string AlertMessage { get; set; }
 	public string AlertType { get; set; }
-
-	protected override async Task OnInitializedAsync()
-	{
-		ListaJugadores = await jugadoresService.Listar(criterio: j => j.JugadorId > 0);
-	}
 
 	public async Task Guardar()
 	{
