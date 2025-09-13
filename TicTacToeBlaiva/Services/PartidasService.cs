@@ -30,7 +30,7 @@ public class PartidasService (IDbContextFactory<Contexto> DbFactory)
 
     public async Task<bool> Modificar(Partidas partida)
     {
-        if(partida.Jugador1Id != partida.Jugador2Id)
+        if(partida.Jugador1Id != partida.Jugador2Id && (partida.GanadorId == partida.Jugador1Id || partida.GanadorId == partida.Jugador2Id) && (partida.TurnoJugadorId == partida.Jugador1Id || partida.TurnoJugadorId == partida.Jugador2Id))
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             contexto.Update(partida);
