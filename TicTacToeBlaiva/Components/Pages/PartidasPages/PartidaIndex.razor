@@ -1,4 +1,4 @@
-﻿@page "/partida/index"
+﻿@page "/partidas/index"
 
 @inject PartidasService partidasService
 @inject JugadoresService jugadoresService
@@ -28,7 +28,7 @@
 				</div>
 
 				<div class="col-5">
-					<a href="/partida/create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Crear</a>
+					<a href="/partidas/create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Crear</a>
 				</div>
 			</div>
 
@@ -77,7 +77,7 @@
 							<td>@partida.FechaFin</td>
 
 							<td>
-								<a class="btn btn-outline-primary bi bi-pencil-square" href="/partida/edit/@partida.PartidaId"></a>
+								<a class="btn btn-outline-primary bi bi-pencil-square" href="/partidas/edit/@partida.PartidaId"></a>
 							</td>
 						</tr>
 					}
@@ -112,7 +112,7 @@
 			else if (Filtro == nameof(Partidas.EstadoPartida))
 				ListaPartidas = await partidasService.Listar(criterio: p => p.EstadoPartida.ToLower().Contains(ValorFiltro.ToLower()));
 			else if (Filtro == "Fechas")
-				ListaPartidas = await partidasService.Listar(criterio: p => p.FechaInicio.ToString().Contains(ValorFiltro.ToLower()) || p.FechaFin.ToString().Contains(ValorFiltro.ToLower()));
+				ListaPartidas = await partidasService.Listar(criterio: p => p.FechaInicio.ToString().Contains(ValorFiltro) || p.FechaFin.ToString().Contains(ValorFiltro));
 		}
 		else
 			ListaPartidas = await partidasService.Listar(criterio: p => p.PartidaId > 0);

@@ -28,13 +28,9 @@ public class JugadoresService(IDbContextFactory<Contexto> DbFactory)
     public async Task<bool> Guardar(Jugadores jugador)
     {
         if(!await Existe(jugador.JugadorId) && !await ExisteNombres(jugador.Nombres))
-        {
             return await Insertar(jugador);
-        }
         else
-        {
             return false;
-        }
     }
 
     public async Task<bool> Modificar(Jugadores jugador)

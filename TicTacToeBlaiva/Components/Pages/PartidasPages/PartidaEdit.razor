@@ -1,4 +1,4 @@
-﻿@page "/partida/edit/{PartidaId:int}"
+﻿@page "/partidas/edit/{PartidaId:int}"
 
 @inject PartidasService partidasService
 @inject NavigationManager navigationManager
@@ -92,7 +92,7 @@
 						<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
 						<button type="button" class="btn btn-outline-danger bi bi-trash-fill" @onclick="Eliminar"> Eliminar</button>
 					}
-					<a href="/partida/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
+					<a href="/partidas/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 				</div>
 			</div>
 		</div>
