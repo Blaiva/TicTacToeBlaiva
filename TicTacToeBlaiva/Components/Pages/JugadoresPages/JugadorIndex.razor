@@ -66,7 +66,7 @@
 						<tr>
 							<td>@jugador.JugadorId</td>
 							<td>@jugador.Nombres</td>
-							<td>@jugador.Partidas</td>
+							<td>@jugador.Victorias</td>
 
 							<td>
 								<a class="btn btn-outline-primary bi bi-pencil-square" href="/jugadores/edit/@jugador.JugadorId"></a>
@@ -104,9 +104,9 @@
 			{
 				ListaJugadores = await jugadoresService.Listar(criterio:j=>j.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
 			}
-			else if (Filtro == nameof(Jugadores.Partidas))
+			else if (Filtro == nameof(Jugadores.Victorias))
 			{
-				ListaJugadores = await jugadoresService.Listar(criterio: j => j.Partidas.ToString().Equals(ValorFiltro));
+				ListaJugadores = await jugadoresService.Listar(criterio: j => j.Victorias.ToString().Equals(ValorFiltro));
 			}
 		}
 		else
