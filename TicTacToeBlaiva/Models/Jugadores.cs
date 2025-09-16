@@ -13,4 +13,6 @@ public class Jugadores
     [Required(ErrorMessage = "Este campo es obligatorio")]
     [Range(0, int.MaxValue)]
     public int Victorias { get; set; }
+    public int Derrotas { get; set; }
+    public int Empates {  get; set; }
 }
