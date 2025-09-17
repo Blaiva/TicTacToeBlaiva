@@ -56,7 +56,9 @@
 					<tr>
 						<th>JugadorId</th>
 						<th>Nombres</th>
-						<th>Partidas</th>
+						<th>Victorias</th>
+						<th>Derrotas</th>
+						<th>Empates</th>
 						<th>Editar</th>
 					</tr>
 				</thead>
@@ -67,6 +69,8 @@
 							<td>@jugador.JugadorId</td>
 							<td>@jugador.Nombres</td>
 							<td>@jugador.Victorias</td>
+							<td>@jugador.Derrotas</td>
+							<td>@jugador.Empates</td>
 
 							<td>
 								<a class="btn btn-outline-primary bi bi-pencil-square" href="/jugadores/edit/@jugador.JugadorId"></a>

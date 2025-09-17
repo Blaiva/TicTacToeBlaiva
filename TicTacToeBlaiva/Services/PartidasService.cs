@@ -55,6 +55,7 @@ public class PartidasService (IDbContextFactory<Contexto> DbFactory)
     public async Task<List<Partidas>> Listar(Expression<Func<Partidas, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.Partidas.Where(criterio).AsNoTracking().ToListAsync();
+        return await contexto.Partidas.Where(criterio).AsNoTracking().
+            Include(p => p.Jugador1).Include(p => p.Jugador2).Include(p => p.Ganador).Include(p => p.TurnoJugador).ToListAsync();
     }
 }

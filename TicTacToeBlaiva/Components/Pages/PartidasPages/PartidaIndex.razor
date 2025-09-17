@@ -57,9 +57,10 @@
 				<thead class="table table-striped text-black">
 					<tr>
 						<th>PartidaId</th>
-						<th>Jugador1Id</th>
-						<th>Jugador2Id</th>
+						<th>Jugador1</th>
+						<th>Jugador2</th>
 						<th>EstadoPartida</th>
+						<th>Ganador</th>
 						<th>FechaInicio</th>
 						<th>FechaFin</th>
 						<th>Opciones</th>
@@ -70,11 +71,12 @@
 					{
 						<tr>
 							<td>@partida.PartidaId</td>
-							<td>@partida.Jugador1Id</td>
-							<td>@partida.Jugador2Id</td>
+							<td>@partida.Jugador1.Nombres</td>
+							<td>@(partida.Jugador2?.Nombres ?? "N/A")</td>
 							<td>@partida.EstadoPartida</td>
-							<td>@partida.FechaInicio</td>
-							<td>@partida.FechaFin</td>
+							<td>@(partida.Ganador?.Nombres ?? "N/A")</td>
+							<td>@partida.FechaInicio.ToString("dd/MM/yyyy")</td>
+							<td>@(partida.FechaFin?.ToString("dd/MM/yyyy") ?? "N/A")</td>
 
 							<td>
 								<a class="btn btn-outline-primary bi bi-pencil-square" href="/partidas/edit/@partida.PartidaId"></a>
@@ -108,7 +110,7 @@
 		if(ValorFiltro.Trim() != "")
 		{
 			if (Filtro == "Jugadores")
-				ListaPartidas = await partidasService.Listar(criterio: p => p.Jugador1Id.ToString().Equals(ValorFiltro) || p.Jugador2Id.ToString().Equals(ValorFiltro));
+				ListaPartidas = await partidasService.Listar(criterio: p => p.Jugador1.Nombres.Contains(ValorFiltro) || p.Jugador2.Nombres.Contains(ValorFiltro) || p.Ganador.Nombres.Contains(ValorFiltro));
 			else if (Filtro == nameof(Partidas.EstadoPartida))
 				ListaPartidas = await partidasService.Listar(criterio: p => p.EstadoPartida.ToLower().Contains(ValorFiltro.ToLower()));
 			else if (Filtro == "Fechas")
