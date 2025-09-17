@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicTacToeBlaiva.Models;
 
-public class Movimiento
+public class Movimientos
 {
     [Key]
     public int MovimientoId { get; set; }
