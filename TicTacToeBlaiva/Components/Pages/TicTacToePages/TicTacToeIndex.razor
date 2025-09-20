@@ -1,4 +1,9 @@
 ﻿@page "/"
+
+@inject NavigationManager navigationManager
+@inject PartidasService partidasService
+@inject JugadoresService jugadoresService
+
 @rendermode InteractiveServer
 
 <PageTitle>TicTacToe</PageTitle>
@@ -6,57 +11,62 @@
 <div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
 
     <div class="game-container">
-        @if (!gameStarted)
-        {
-            <!-- PANTALLA DE SELECCIÓN DE JUGADOR -->
-            <div class="selection-screen">
-                <h1>Elige tu jugador</h1>
-                <div class="player-buttons">
-                    <button class="btn @(playerTypeSelection == PlayerType.X ? "btn-primary" : "btn-outline-primary")"
-                            @onclick="() => SelectPlayerType(PlayerType.X)">
-                        Jugador X
-                    </button>
-                    <button class="btn @(playerTypeSelection == PlayerType.O ? "btn-info" : "btn-outline-info")"
-                            @onclick="() => SelectPlayerType(PlayerType.O)">
-                        Jugador O
-                    </button>
-                </div>
-                <button class="btn btn-success btn-lg mt-4"
-                        disabled="@(playerTypeSelection == null)"
-                        @onclick="StartGame">
-                    Iniciar Partida
-                </button>
+        <!-- PANTALLA DE SELECCIÓN DE JUGADOR -->
+        <div class="selection-screen">
+            <h1>Elige tu jugador</h1>
+            <div class="player-buttons">
+                <label class="form-label"><strong>Jugador X</strong></label>
+                <InputSelect class="form-select" @bind-Value="Partida.Jugador1Id">
+                    <option value="0" selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador2Id)">@jugador.Nombres</option>
+                    }
+                </InputSelect>
+
+                <label class="form-label"><strong>Jugador O</strong></label>
+                <InputSelect class="form-select" @bind-Value="Partida.Jugador2Id">
+                    <option value=null selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador1Id)">@jugador.Nombres</option>
+                    }
+                </InputSelect>
             </div>
-        }
-        else
-        {
-            
-        }
+            <button class="btn btn-success btn-lg mt-4"
+                    disabled="@(Partida.Jugador1Id == 0)"
+                    @onclick="StartGame">
+                Iniciar Partida
+            </button>
+        </div>
     </div>
 </div>
 
 
 @code {
-    private bool gameStarted;
-    private PlayerType? playerTypeSelection;
+    public Partidas Partida { get; set; } = new Partidas();
+    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
 
-    private void SelectPlayerType(PlayerType playerType)
+    protected override async Task OnInitializedAsync()
     {
-        playerTypeSelection = playerType;
-        StateHasChanged();
+        ListaJugadores = await jugadoresService.Listar(criterio: j => j.JugadorId > 0);
     }
 
-    private void StartGame()
+    public async Task StartGame()
     {
-        if (playerTypeSelection.HasValue)
+        if (Partida.Jugador2Id == null)
+            Partida.EstadoPartida = "Pendiente";
+        else
+            Partida.EstadoPartida = "En Curso";
+
+        Partida.TurnoJugadorId = Partida.Jugador1Id;
+        Partida.EstadoTablero = "---------";
+
+
+        var creado = await partidasService.Guardar(Partida);
+        if (creado)
         {
-            gameStarted = true;
+            navigationManager.NavigateTo("/game");
         }
-    }
-
-    private void RestartGame()
-    {
-        gameStarted = false;
-        playerTypeSelection = null;
     }
 }

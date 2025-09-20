@@ -30,6 +30,8 @@
 
 
 @code {
+    public enum PlayerType { X, O }
+
     private PlayerType?[] board = new PlayerType?[9];
     private PlayerType _currentPlayerType = PlayerType.X;
     private PlayerType? winner;
