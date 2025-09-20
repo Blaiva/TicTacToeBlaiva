@@ -1,0 +1,62 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>TicTacToe</PageTitle>
+
+<div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
+
+    <div class="game-container">
+        @if (!gameStarted)
+        {
+            <!-- PANTALLA DE SELECCIÓN DE JUGADOR -->
+            <div class="selection-screen">
+                <h1>Elige tu jugador</h1>
+                <div class="player-buttons">
+                    <button class="btn @(playerTypeSelection == PlayerType.X ? "btn-primary" : "btn-outline-primary")"
+                            @onclick="() => SelectPlayerType(PlayerType.X)">
+                        Jugador X
+                    </button>
+                    <button class="btn @(playerTypeSelection == PlayerType.O ? "btn-info" : "btn-outline-info")"
+                            @onclick="() => SelectPlayerType(PlayerType.O)">
+                        Jugador O
+                    </button>
+                </div>
+                <button class="btn btn-success btn-lg mt-4"
+                        disabled="@(playerTypeSelection == null)"
+                        @onclick="StartGame">
+                    Iniciar Partida
+                </button>
+            </div>
+        }
+        else
+        {
+            
+        }
+    </div>
+</div>
+
+
+@code {
+    private bool gameStarted;
+    private PlayerType? playerTypeSelection;
+
+    private void SelectPlayerType(PlayerType playerType)
+    {
+        playerTypeSelection = playerType;
+        StateHasChanged();
+    }
+
+    private void StartGame()
+    {
+        if (playerTypeSelection.HasValue)
+        {
+            gameStarted = true;
+        }
+    }
+
+    private void RestartGame()
+    {
+        gameStarted = false;
+        playerTypeSelection = null;
+    }
+}

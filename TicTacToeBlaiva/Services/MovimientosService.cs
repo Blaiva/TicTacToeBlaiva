@@ -37,6 +37,6 @@ public class MovimientosService (IDbContextFactory<Contexto> DbFactory)
     public async Task<List<Movimientos>> Listar(Expression<Func<Movimientos, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.Movimientos.Where(criterio).Include(m => m.Jugador.Nombres).AsNoTracking().ToListAsync();
+        return await contexto.Movimientos.Where(criterio).Include(m => m.Jugador).AsNoTracking().ToListAsync();
     }
 }
