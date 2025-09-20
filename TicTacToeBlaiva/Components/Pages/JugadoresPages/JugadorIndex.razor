@@ -83,7 +83,10 @@
 
 		@*Footer*@
 		<div class="card-footer space-between">
-			<label>Cantidad: @ListaJugadores.Count()</label>
+			<label class="me-3"><strong>Cantidad:</strong> @ListaJugadores.Count()</label>
+			<label class="me-3"><strong>Victorias:</strong> @ListaJugadores.Sum(j => j.Victorias)</label>
+			<label class="me-3"><strong>Derrotas:</strong> @ListaJugadores.Sum(j => j.Derrotas)</label>
+			<label class="me-3"><strong>Empates:</strong> @ListaJugadores.Sum(j => j.Empates)</label>
 		</div>
 	</div>
 </div>

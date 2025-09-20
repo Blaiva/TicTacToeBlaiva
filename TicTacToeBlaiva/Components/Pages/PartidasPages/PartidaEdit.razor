@@ -32,35 +32,30 @@
 
 				<div class="mb-3">
 					<label class="form-label"><strong>Jugador2Id</strong></label>
-					<InputNumber class="form-control" @bind-Value="Partida.Jugador2Id" />
+					<InputNumber class="form-control" @bind-Value="Partida.Jugador2Id" readonly/>
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label"><strong>EstadoPartida</strong></label>
-					<InputSelect class="form-select" @bind-Value="Partida.EstadoPartida">
-						<option value="" selected disabled>Elija una opci&oacute;n</option>
-						<option value="Pendiente">Pendiente</option>
-						<option value="EnCurso">En curso</option>
-						<option value="Finalizada">Finalizada</option>
-					</InputSelect>
-					<ValidationMessage For="@(() => Partida.EstadoPartida)"/>
+					<InputText class="form-control" @bind-Value="Partida.EstadoPartida" readonly/>
+					<ValidationMessage For="@(() => Partida.EstadoTablero)" />
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label"><strong>GanadorId</strong></label>
-					<InputNumber class="form-control" @bind-value="Partida.GanadorId"/>
+					<InputNumber class="form-control" @bind-value="Partida.GanadorId" readonly/>
 					<ValidationMessage For="@(() => Partida.GanadorId)" />
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label"><strong>TurnoId</strong></label>
-					<InputNumber class="form-control" @bind-value="Partida.TurnoJugadorId" />
+					<InputNumber class="form-control" @bind-value="Partida.TurnoJugadorId" readonly/>
 					<ValidationMessage For="@(() => Partida.TurnoJugadorId)" />
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label"><strong>EstadoTablero</strong></label>
-					<InputText class="form-control" @bind-Value="Partida.EstadoTablero" />
+					<InputText class="form-control" @bind-Value="Partida.EstadoTablero" readonly/>
 					<ValidationMessage For="@(() => Partida.EstadoTablero)" />
 				</div>
 
@@ -89,8 +84,12 @@
 				<div class="btn-group">
 					@if (!(AlertType == "success"))
 					{
-						<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
+						@* <button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button> *@
 						<button type="button" class="btn btn-outline-danger bi bi-trash-fill" @onclick="Eliminar"> Eliminar</button>
+						@if (Partida.EstadoPartida == "En Curso")
+						{
+							<button type="button" class="btn btn-outline-primary bi bi-play-fill" @onclick="Reanudar"> Reanudar</button>
+						}
 					}
 					<a href="/partidas/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 				</div>
@@ -142,5 +141,10 @@
 			AlertMessage = "Error al eliminar el partida.";
 			AlertType = "danger";
 		}
+	}
+
+	public async Task Reanudar()
+	{
+		navigationManager.NavigateTo("/game/" + Partida.PartidaId);
 	}
 }

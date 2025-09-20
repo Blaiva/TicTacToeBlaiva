@@ -3,6 +3,7 @@
 @inject PartidasService partidasService
 @inject MovimientosService movimientosService
 @inject JugadoresService jugadoresService
+@inject NavigationManager navigationManager
 
 @rendermode InteractiveServer
 
@@ -24,9 +25,14 @@
                 }
             </div>
 
-            <button class="btn btn-secondary mt-4" @onclick="RestartGame">
-                Reiniciar Juego
-            </button>
+            <div class="btn-group mt-4">
+                @if(winner != null || esEmpate)
+                {
+                    <button class="btn btn-outline-primary bi bi-play-fill" @onclick="RestartGame"> Reiniciar Juego</button>
+                }
+                <a href="/" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -52,6 +58,8 @@
         Partida = await partidasService.Buscar(PartidaId);
         _currentPlayerId = Partida.Jugador1Id;
         _currentPlayer = await jugadoresService.Buscar(_currentPlayerId ?? 0);
+        if (Partida.EstadoTablero != "---------")
+            board = Partida.EstadoTablero.Select(c => c == '-' ? (PlayerType?)null : Enum.Parse<PlayerType>(c.ToString())).ToArray();
     }
 
     private string GameStatus
@@ -89,6 +97,7 @@
         _currentPlayerType = (_currentPlayerType == PlayerType.X)
             ? PlayerType.O
             : PlayerType.X;
+
         _currentPlayerId = (_currentPlayerId == Partida.Jugador1Id)
             ? Partida.Jugador2Id
             : Partida.Jugador1Id;
@@ -117,7 +126,7 @@
         else if(esEmpate)
             Partida.EstadoPartida = "Empate";
 
-        Partida.TurnoJugadorId = _currentPlayerId ?? 0;
+        Partida.TurnoJugadorId = (_currentPlayerId == Partida.Jugador1Id ? Partida.Jugador2Id : Partida.Jugador1Id) ?? 0;
         Partida.FechaFin = winner != null || esEmpate ? Movimiento.FechaMovimiento : null;
         await partidasService.Modificar(Partida);
     }
@@ -170,12 +179,23 @@
         return null; // No hay ganador
     }
 
-    private void RestartGame()
+    public async Task RestartGame()
     {
-        board = new PlayerType?[9];
-        _currentPlayerType = PlayerType.X;
-        winner = null;
-        esEmpate = false;
+        int jugador1Id = Partida.Jugador1Id;
+        int? jugador2Id = Partida.Jugador2Id;
+
+        Partida = new Partidas();
+        Partida.Jugador1Id = jugador1Id;
+        Partida.Jugador2Id = jugador2Id;
+        Partida.EstadoPartida = "En Curso";
+        Partida.TurnoJugadorId = Partida.Jugador1Id;
+        Partida.EstadoTablero = "---------";
+
+        var creado = await partidasService.Guardar(Partida);
+        if (creado)
+        {
+            navigationManager.NavigateTo("/game/" + Partida.PartidaId);
+        }
     }
 
     private string GetPlayerClass(PlayerType? player)

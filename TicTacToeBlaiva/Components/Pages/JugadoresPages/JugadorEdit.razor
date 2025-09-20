@@ -30,12 +30,6 @@
 					<ValidationMessage For="@(() => Jugador.Nombres)" />
 				</div>
 
-				<div class="mb-3">
-					<label class="form-label"><strong>Partidas</strong></label>
-					<InputNumber class="form-control" @bind-Value="Jugador.Victorias" />
-					<ValidationMessage For="@(() => Jugador.Victorias)" />
-				</div>
-
 				@if(!string.IsNullOrEmpty(AlertMessage))
 				{
 					<div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
@@ -52,7 +46,7 @@
 						<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
 						<button type="button" class="btn btn-outline-danger bi bi-trash-fill" @onclick="Eliminar"> Eliminar</button>
 					}
-					<a href="/" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
+					<a href="/jugadores/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 				</div>
 			</div>
 		</div>
@@ -73,7 +67,8 @@
 
 	public async Task Modificar()
 	{
-		var modificado = await jugadoresService.Modificar(Jugador);
+		var modificado = !(await jugadoresService.ExisteNombres(Jugador.Nombres)) && await jugadoresService.Modificar(Jugador); ;
+		
 		if (modificado)
 		{
 			AlertMessage = "Jugador modificado correctamente.";
@@ -104,7 +99,7 @@
 		}
 		catch(Exception e)
 		{
-			AlertMessage = e.Message;
+			AlertMessage = "No se puede eliminar, el jugador tiene partidas registradas";
 			AlertType = "danger";
 		}
 
