@@ -15,6 +15,7 @@ builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 //Inyección del Service
 builder.Services.AddScoped<JugadoresService>();
 builder.Services.AddScoped<PartidasService>();
+builder.Services.AddScoped<MovimientosService>();
 
 var app = builder.Build();
 

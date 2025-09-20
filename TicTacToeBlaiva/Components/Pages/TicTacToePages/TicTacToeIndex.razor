@@ -34,7 +34,7 @@
                 </InputSelect>
             </div>
             <button class="btn btn-success btn-lg mt-4"
-                    disabled="@(Partida.Jugador1Id == 0)"
+                    disabled="@(Partida.Jugador1Id == 0 || Partida.Jugador2Id == null)"
                     @onclick="StartGame">
                 Iniciar Partida
             </button>
@@ -66,7 +66,7 @@
         var creado = await partidasService.Guardar(Partida);
         if (creado)
         {
-            navigationManager.NavigateTo("/game");
+            navigationManager.NavigateTo("/game/" + Partida.PartidaId);
         }
     }
 }
