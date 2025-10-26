@@ -9,8 +9,13 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 //Inyección del Contexto
+/*
 var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
 builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
+*/
+
+//Inyeccion del API
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/") });
 
 //Inyección del Service
 builder.Services.AddScoped<JugadoresService>();
