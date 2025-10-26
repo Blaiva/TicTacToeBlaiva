@@ -6,16 +6,16 @@ namespace TicTacToeBlaiva.Services
 {
     public class MovimientosApiService(HttpClient httpClient) : IMovimientosApiService
     {
-        public async Task<Resource<List<MovimientoResponse>>> GetMovimientosAsync(int partidaId)
+        public async Task<Resource<MovimientoResponse>> GetMovimientoAsync(int partidaId)
         {
             try
             {
-                var response = await httpClient.GetFromJsonAsync<List<MovimientoResponse>>($"api/Movimientos/{partidaId}");
-                return new Resource<List<MovimientoResponse>>.Success(response ?? []);
+                var response = await httpClient.GetFromJsonAsync<MovimientoResponse>($"api/Movimientos/{partidaId}");
+                return new Resource<MovimientoResponse>.Success(response!);
             }
             catch (Exception ex)
             {
-                return new Resource<List<MovimientoResponse>>.Error(ex.Message);
+                return new Resource<MovimientoResponse>.Error(ex.Message);
             }
         }
 
