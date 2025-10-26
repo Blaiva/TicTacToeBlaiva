@@ -8,8 +8,7 @@ namespace TicTacToeBlaiva.Shared.DTOs;
 
 public record MovimientoResponse(
     int MovimientoId,
-    int PartidaId,
-    int JugadorId,
+    string Jugador,
     int PosicionFila,
     int PosicionColumna
 );

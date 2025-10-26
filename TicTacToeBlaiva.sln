@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeBlaiva", "TicTacToeBlaiva\TicTacToeBlaiva.csproj", "{98322AAA-133D-4F39-8776-C1518E65044D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeBlaiva.BlazorWasm", "TicTacToeBlaiva.BlazorWasm\TicTacToeBlaiva.BlazorWasm.csproj", "{13D66A18-B69A-4764-9D49-421C6BCDED62}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeBlaiva.Shared", "TicTacToeBlaiva.Shared\TicTacToeBlaiva.Shared.csproj", "{FE0095BD-29A9-43B4-A2E2-B9BCF3F3E8CA}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{98322AAA-133D-4F39-8776-C1518E65044D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98322AAA-133D-4F39-8776-C1518E65044D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98322AAA-133D-4F39-8776-C1518E65044D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13D66A18-B69A-4764-9D49-421C6BCDED62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13D66A18-B69A-4764-9D49-421C6BCDED62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13D66A18-B69A-4764-9D49-421C6BCDED62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13D66A18-B69A-4764-9D49-421C6BCDED62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE0095BD-29A9-43B4-A2E2-B9BCF3F3E8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE0095BD-29A9-43B4-A2E2-B9BCF3F3E8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE0095BD-29A9-43B4-A2E2-B9BCF3F3E8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
