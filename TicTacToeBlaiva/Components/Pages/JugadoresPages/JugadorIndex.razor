@@ -1,6 +1,6 @@
-﻿@page "/jugadores/index"
+﻿@page "/"
 
-@inject JugadoresService jugadoresService
+@inject IJugadoresApiService jugadoresApiService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -56,10 +56,7 @@
 					<tr>
 						<th>JugadorId</th>
 						<th>Nombres</th>
-						<th>Victorias</th>
-						<th>Derrotas</th>
-						<th>Empates</th>
-						<th>Editar</th>
+						<th>Email</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -68,10 +65,7 @@
 						<tr>
 							<td>@jugador.JugadorId</td>
 							<td>@jugador.Nombres</td>
-							<td>@jugador.Victorias</td>
-							<td>@jugador.Derrotas</td>
-							<td>@jugador.Empates</td>
-
+							<td>@jugador.Email</td>
 							<td>
 								<a class="btn btn-outline-primary bi bi-pencil-square" href="/jugadores/edit/@jugador.JugadorId"></a>
 							</td>
@@ -84,39 +78,53 @@
 		@*Footer*@
 		<div class="card-footer space-between">
 			<label class="me-3"><strong>Cantidad:</strong> @ListaJugadores.Count()</label>
-			<label class="me-3"><strong>Victorias:</strong> @ListaJugadores.Sum(j => j.Victorias)</label>
-			<label class="me-3"><strong>Derrotas:</strong> @ListaJugadores.Sum(j => j.Derrotas)</label>
-			<label class="me-3"><strong>Empates:</strong> @ListaJugadores.Sum(j => j.Empates)</label>
 		</div>
 	</div>
 </div>
 
 @code {
 
-	public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+	public List<JugadorResponse>? ListaJugadores { get; set; } = new List<JugadorResponse>();
 
 	public string Filtro { get; set; } = string.Empty;
 	public string ValorFiltro { get; set; } = string.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
-		ListaJugadores = await jugadoresService.Listar(criterio:j=>j.JugadorId > 0);
+		if (ListaJugadores == null)
+		{
+			await CargarJugadores();
+		}
+	}
+
+	private async Task CargarJugadores()
+	{
+		var response = await jugadoresApiService.GetJugadoresAsync();
+		if (response is Resource<List<JugadorResponse>>.Success success)
+		{
+			ListaJugadores = success.Data;
+		}
+		else if(response is Resource<List<JugadorResponse>>.Error error)
+		{
+			Console.WriteLine(error.Message);
+		}
 	}
 
 	private async Task Buscar()
 	{
 		if (ValorFiltro.Trim() != "")
 		{
-			if (Filtro == nameof(Jugadores.Nombres))
+			await CargarJugadores();
+			if (Filtro == "Nombres")
 			{
-				ListaJugadores = await jugadoresService.Listar(criterio:j=>j.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
+				ListaJugadores = ListaJugadores.Where(j => j.Nombres.ToLower().Contains(ValorFiltro.ToLower())).ToList();
 			}
-			else if (Filtro == nameof(Jugadores.Victorias))
+			else if (Filtro == "Email")
 			{
-				ListaJugadores = await jugadoresService.Listar(criterio: j => j.Victorias.ToString().Equals(ValorFiltro));
+				ListaJugadores = ListaJugadores.Where(j => j.Email.Contains(ValorFiltro)).ToList();
 			}
 		}
 		else
-			ListaJugadores = await jugadoresService.Listar(criterio: j => j.JugadorId > 0);
+			await CargarJugadores();
 	}
 }
