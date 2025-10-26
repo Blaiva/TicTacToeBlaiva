@@ -14,8 +14,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TicTacToeBlaiva.Shared\TicTacToeBlaiva.Shared.csproj" />
-  </ItemGroup>
-
 </Project>
