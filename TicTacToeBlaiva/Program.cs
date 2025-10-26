@@ -2,7 +2,6 @@ using TicTacToeBlaiva.Components;
 using TicTacToeBlaiva.DAL;
 using TicTacToeBlaiva.Services;
 using Microsoft.EntityFrameworkCore;
-using TicTacToeBlaiva.BlazorWasm.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +18,9 @@ builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/") });
 
 //Inyección del Service
-builder.Services.AddScoped<IJugadoresApiService, JugadoresApiService>();
-builder.Services.AddScoped<IPartidasApiService, PartidasApiService>();
-builder.Services.AddScoped<IMovimientosApiService, MovimientosApiService>();
+builder.Services.AddScoped<JugadoresService>();
+builder.Services.AddScoped<PartidasService>();
+builder.Services.AddScoped<MovimientosService>();
 
 var app = builder.Build();
 
