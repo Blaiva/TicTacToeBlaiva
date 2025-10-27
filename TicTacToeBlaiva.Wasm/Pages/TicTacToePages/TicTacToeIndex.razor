@@ -1,0 +1,78 @@
+﻿@page "/"
+
+@inject NavigationManager navigationManager
+@inject IPartidasApiService partidasApiService
+@inject IJugadoresApiService jugadoresApiService
+
+<PageTitle>TicTacToe</PageTitle>
+
+<div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
+
+    <div class="game-container">
+        <!-- PANTALLA DE SELECCIÓN DE JUGADOR -->
+        <div class="selection-screen">
+            <h1>Elige tu jugador</h1>
+            <div class="player-buttons">
+                <label class="form-label"><strong>Jugador X</strong></label>
+                <InputSelect class="form-select" @bind-Value="jugador1">
+                    <option value="0" selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador2Id)">@jugador.Nombres</option>
+                    }
+                </InputSelect>
+
+                <label class="form-label"><strong>Jugador O</strong></label>
+                <InputSelect class="form-select" @bind-Value="jugador2">
+                    <option value=null selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador1Id)">@jugador.Nombres</option>
+                    }
+                </InputSelect>
+            </div>
+            <button class="btn btn-success btn-lg mt-4"
+                    disabled="@(Partida.Jugador1Id == 0 || Partida.Jugador2Id == null)"
+                    @onclick="StartGame">
+                Iniciar Partida
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public int jugador1 { get; set; }
+    public int jugador2 { get; set; }
+    public PartidaResponse Partida { get; set; }
+    public List<JugadorResponse> ListaJugadores { get; set; } = new List<JugadorResponse>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarJugadores();
+    }
+
+    private async Task CargarJugadores()
+    {
+        var response = await jugadoresApiService.GetJugadoresAsync();
+
+        if (response is Resource<List<JugadorResponse>>.Success success)
+        {
+            ListaJugadores = success.Data;
+        }
+        else if (response is Resource<List<JugadorResponse>>.Error error)
+        {
+            Console.WriteLine($"Error al cargar partidas: {error.Message}");
+        }
+
+    }
+
+    public async Task StartGame()
+    {
+        var response = await partidasApiService.PostPartida(jugador1, jugador2);
+        if (response is Resource<PartidaResponse>.Success success)
+        {
+            navigationManager.NavigateTo("/game/" + success.Data.PartidaId);
+        }
+    }
+}

@@ -1,8 +1,8 @@
-﻿using TicTacToeBlaiva.Models;
+﻿using System.Net.Http.Json;
 using TicTacToeBlaiva.Shared;
 using TicTacToeBlaiva.Shared.DTOs;
 
-namespace TicTacToeBlaiva.Services
+namespace TicTacToeBlaiva.Wasm.Services
 {
     public class JugadoresApiService(HttpClient httpClient) : IJugadoresApiService
     {

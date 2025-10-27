@@ -1,7 +1,7 @@
 ﻿using TicTacToeBlaiva.Shared;
 using TicTacToeBlaiva.Shared.DTOs;
 
-namespace TicTacToeBlaiva.BlazorWasm.Services;
+namespace TicTacToeBlaiva.Wasm.Services;
 
 public interface IPartidasApiService
 {
