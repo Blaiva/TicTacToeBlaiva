@@ -49,4 +49,23 @@ public class JugadoresApiService(HttpClient httpClient) : IJugadoresApiService
             return new Resource<JugadorResponse>.Error("Respuesta inválida del servidor.");
         }
     }
+
+    public async Task<Resource<JugadorResponse>> PutJugadores(int jugadorId, string nombre, string email)
+    {
+        var request = new JugadorRequest(nombre, email);
+        try
+        {
+            var response = await httpClient.PutAsJsonAsync($"api/Jugadores/{jugadorId}", request);
+            response.EnsureSuccessStatusCode();
+            return new Resource<JugadorResponse>.Success(null!);
+        }
+        catch (HttpRequestException ex)
+        {
+            return new Resource<JugadorResponse>.Error($"Error de red: {ex.Message}");
+        }
+        catch (NotSupportedException)
+        {
+            return new Resource<JugadorResponse>.Error("Respuesta inválida del servidor.");
+        }
+    }
 }
