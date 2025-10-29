@@ -2,7 +2,7 @@
 
 namespace TicTacToeBlaiva.Services;
 
-public interface IPartidaApiService
+public interface IPartidasApiService
 {
     Task<Resource<List<PartidaResponse>>> GetPartidasAsync();
     Task<Resource<PartidaResponse>> GetPartidaAsync(int partidaId);

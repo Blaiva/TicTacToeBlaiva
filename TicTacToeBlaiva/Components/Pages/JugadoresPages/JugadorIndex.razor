@@ -111,6 +111,7 @@
 
 	private async Task Buscar()
 	{
+		await CargarJugadores();
 		if (ValorFiltro.Trim() != "")
 		{
 			if (Filtro == nameof(JugadorResponse.Nombres))

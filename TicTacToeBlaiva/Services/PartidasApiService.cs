@@ -2,7 +2,7 @@
 
 namespace TicTacToeBlaiva.Services;
 
-public class PartidaApiService(HttpClient httpClient) : IPartidaApiService
+public class PartidasApiService(HttpClient httpClient) : IPartidasApiService
 {
     public async Task<Resource<PartidaResponse>> GetPartidaAsync(int partidaId)
     {
