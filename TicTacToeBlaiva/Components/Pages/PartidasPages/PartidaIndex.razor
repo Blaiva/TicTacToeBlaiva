@@ -1,7 +1,6 @@
 ﻿@page "/partidas/index"
 
-@inject PartidasService partidasService
-@inject JugadoresService jugadoresService
+@inject IPartidasApiService partidasService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -28,7 +27,7 @@
 				</div>
 
 				<div class="col-5">
-					<a href="/partidas/create" class="btn btn-primary disabled"><span class="bi bi-plus-square mt-3"></span> Crear</a>
+					<a href="/" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Crear</a>
 				</div>
 			</div>
 
@@ -38,8 +37,6 @@
 					<InputSelect class="form-select" @bind-Value="Filtro">
 						<option value="" selected disabled>Elija una opci&oacute;n</option>
 						<option value="Jugadores">Jugadores</option>
-						<option value="EstadoPartida">EstadosPartida</option>
-						<option value="Fechas">Fechas</option>
 					</InputSelect>
 				</div>
 
@@ -57,13 +54,9 @@
 				<thead class="table table-striped text-black">
 					<tr>
 						<th>PartidaId</th>
-						<th>Jugador1</th>
-						<th>Jugador2</th>
-						<th>EstadoPartida</th>
-						<th>Ganador</th>
-						<th>FechaInicio</th>
-						<th>FechaFin</th>
-						<th>Opciones</th>
+						<th>Jugador1Id</th>
+						<th>Jugador2Id</th
+						<th>Unirse</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,15 +64,10 @@
 					{
 						<tr>
 							<td>@partida.PartidaId</td>
-							<td>@partida.Jugador1.Nombres</td>
-							<td>@(partida.Jugador2?.Nombres ?? "N/A")</td>
-							<td>@partida.EstadoPartida</td>
-							<td>@(partida.Ganador?.Nombres ?? "N/A")</td>
-							<td>@partida.FechaInicio.ToString("dd/MM/yyyy")</td>
-							<td>@(partida.FechaFin?.ToString("dd/MM/yyyy") ?? "N/A")</td>
-
+							<td>@partida.Jugador1Id</td>
+							<td>@(partida?.Jugador2Id == null ? "N/A" : @partida?.Jugador2Id)</td
 							<td>
-								<a class="btn btn-outline-primary bi bi-pencil-square" href="/partidas/edit/@partida.PartidaId"></a>
+								<a href="/game/@partida.PartidaId" class="btn btn-outline-primary"><span class="bi bi-play-fill"/></a>
 							</td>
 						</tr>
 					}
@@ -95,28 +83,38 @@
 </div>
 
 @code {
-	public List<Partidas> ListaPartidas { get; set; } = new List<Partidas>();
+	public List<PartidaResponse> ListaPartidas { get; set; } = new List<PartidaResponse>();
 
 	public string Filtro { get; set; } = string.Empty;
 	public string ValorFiltro { get; set; } = string.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
-		ListaPartidas = await partidasService.Listar(criterio: p => p.PartidaId > 0);
+		await CargarPartidas();
+	}
+
+	private async Task CargarPartidas()
+	{
+		var response = await partidasService.GetPartidasAsync();
+		if(response is Resource<List<PartidaResponse>>.Success success)
+		{
+			ListaPartidas = success.Data;
+		}
+		else if (response is Resource<List<PartidaResponse>>.Error error)
+		{
+			Console.WriteLine($"Error al cargar partidas: {error.Message}");
+		}
 	}
 
 	private async Task Buscar()
 	{
-		if(ValorFiltro.Trim() != "")
+		await CargarPartidas();
+		if (ValorFiltro.Trim() != "")
 		{
 			if (Filtro == "Jugadores")
-				ListaPartidas = await partidasService.Listar(criterio: p => p.Jugador1.Nombres.Contains(ValorFiltro) || p.Jugador2.Nombres.Contains(ValorFiltro) || p.Ganador.Nombres.Contains(ValorFiltro));
-			else if (Filtro == nameof(Partidas.EstadoPartida))
-				ListaPartidas = await partidasService.Listar(criterio: p => p.EstadoPartida.ToLower().Contains(ValorFiltro.ToLower()));
-			else if (Filtro == "Fechas")
-				ListaPartidas = await partidasService.Listar(criterio: p => p.FechaInicio.ToString().Contains(ValorFiltro) || p.FechaFin.ToString().Contains(ValorFiltro));
+				ListaPartidas = ListaPartidas.Where(p => p.Jugador1Id.ToString().Equals(ValorFiltro)).ToList();
 		}
 		else
-			ListaPartidas = await partidasService.Listar(criterio: p => p.PartidaId > 0);
+			await CargarPartidas();
 	}
 }

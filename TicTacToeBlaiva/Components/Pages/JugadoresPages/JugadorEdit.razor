@@ -1,107 +1,87 @@
 ﻿@page "/jugadores/edit/{JugadorId:int}"
 
-@inject JugadoresService jugadoresService
+@inject IJugadoresApiService jugadoresService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Editar Jugador</PageTitle>
-<EditForm Model="Jugador" OnValidSubmit="Modificar">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
 
-	<div class="container">
-		<div class="card shadow-lg">
+<div class="container">
+	<div class="card shadow-lg">
 
-			@*Header*@
-			<div class="card-header text-center">
-				<h5 class="card-title">Editar Jugador</h5>
+		@*Header*@
+		<div class="card-header text-center">
+			<h5 class="card-title">Editar Jugador</h5>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<div class="mb-3">
+				<label class="form-label"><strong>JugadorId</strong></label>
+				<InputNumber class="form-control" @bind-Value="JugadorId" readonly />
 			</div>
 
-			@*Body*@
-			<div class="card-body">
-				<div class="mb-3">
-					<label class="form-label"><strong>JugadorId</strong></label>
-					<InputNumber class="form-control" @bind-Value="Jugador.JugadorId" readonly />
-				</div>
+			<div class="mb-3">
+				<label class="form-label"><strong>Nombres</strong></label>
+				<InputText class="form-control" @bind-Value="nombres" />
+			</div>
 
-				<div class="mb-3">
-					<label class="form-label"><strong>Nombres</strong></label>
-					<InputText class="form-control" @bind-Value="Jugador.Nombres" />
-					<ValidationMessage For="@(() => Jugador.Nombres)" />
-				</div>
+			<div class="mb-3">
+				<label class="form-label"><strong>Email</strong></label>
+				<InputText class="form-control" @bind-Value="email" />
+			</div>
 
-				@if(!string.IsNullOrEmpty(AlertMessage))
+			@if(!string.IsNullOrEmpty(AlertMessage))
+			{
+				<div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
+					<div>@AlertMessage</div>
+				</div>
+			}
+		</div>
+
+		@*Footer*@
+		<div class="card-footer text-center mt-2">
+			<div class="btn-group">
+				@if (!(AlertType == "success"))
 				{
-					<div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
-						<div>@AlertMessage</div>
-					</div>
+					<button type="button" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
 				}
-			</div>
-
-			@*Footer*@
-			<div class="card-footer text-center mt-2">
-				<div class="btn-group">
-					@if (!(AlertType == "success"))
-					{
-						<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
-						<button type="button" class="btn btn-outline-danger bi bi-trash-fill" @onclick="Eliminar"> Eliminar</button>
-					}
-					<a href="/jugadores/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
-				</div>
+				<a href="/jugadores/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 			</div>
 		</div>
 	</div>
-</EditForm>
+</div>
+
 @code {
 
 	[Parameter]
 	public int JugadorId { get; set; }
-	public Jugadores Jugador { get; set; } = new Jugadores();
+	public string nombres { get; set; }
+	public string email { get; set; }
+
 	public string AlertMessage { get; set; }
 	public string AlertType { get; set; }
 
 	protected async override Task OnInitializedAsync()
 	{
-		Jugador = await jugadoresService.Buscar(JugadorId);
+		var Jugador = (await jugadoresService.GetJugadoresAsync(JugadorId)).Data;
+		nombres = Jugador.Nombres;
+		email = Jugador.Email;
 	}
 
 	public async Task Modificar()
 	{
-		var modificado = !(await jugadoresService.ExisteNombres(Jugador.Nombres)) && await jugadoresService.Modificar(Jugador); ;
+		var modificado = await jugadoresService.PutJugadores(JugadorId, nombres, email);
 		
-		if (modificado)
+		if (modificado is Resource<JugadorResponse>.Success)
 		{
 			AlertMessage = "Jugador modificado correctamente.";
 			AlertType = "success";
 		}
-		else
+		else if (modificado is Resource<JugadorResponse>.Error)
 		{
 			AlertMessage = "Error al modificar el jugador.";
 			AlertType = "danger";
 		}
-	}
-
-	public async Task Eliminar()
-	{
-		try
-		{
-			var eliminado = await jugadoresService.Eliminar(JugadorId);
-			if (eliminado)
-			{
-				AlertMessage = "Jugador eliminado correctamente.";
-				AlertType = "success";
-			}
-			else
-			{
-				AlertMessage = "Error al eliminar el jugador.";
-				AlertType = "danger";
-			}
-		}
-		catch(Exception e)
-		{
-			AlertMessage = "No se puede eliminar, el jugador tiene partidas registradas";
-			AlertType = "danger";
-		}
-
 	}
 }

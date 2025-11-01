@@ -12,6 +12,21 @@ builder.Services.AddRazorComponents()
 var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
 builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 
+builder.Services.AddHttpClient<IJugadoresApiService, JugadoresApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
+});
+
+builder.Services.AddHttpClient<IPartidasApiService, PartidasApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
+});
+
+builder.Services.AddHttpClient<IMovimientosApiService, MovimientosApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
+});
+
 //Inyección del Service
 builder.Services.AddScoped<JugadoresService>();
 builder.Services.AddScoped<PartidasService>();

@@ -1,70 +1,67 @@
 ﻿@page "/jugadores/create"
 
-@inject JugadoresService jugadoresService
+@inject IJugadoresApiService jugadoresService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Crear Jugador</PageTitle>
-<EditForm Model="Jugador" OnValidSubmit="Guardar">
-	<DataAnnotationsValidator />
 
-	<div class="container">
-		<div class="card shadow-lg">
-			@*Header*@
-			<div class="card-header text-center">
-				<h5 class="card-title">Crear Jugador</h5>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header text-center">
+			<h5 class="card-title">Crear Jugador</h5>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<div class="mb-3">
+				<label class="form-label"><strong>Nombres</strong></label>
+				<InputText class="form-control" @bind-Value="nombres" />
 			</div>
 
-			@*Body*@
-			<div class="card-body">
+			<div class="mb-3">
+				<label class="form-label"><strong>Email</strong></label>
+				<InputText class="form-control" @bind-Value="email" />
+			</div>
 
-				<div class="mb-3">
-					<label class="form-label"><strong>JugadorId</strong></label>
-					<InputNumber class="form-control" @bind-Value="Jugador.JugadorId" readonly/>
+			@if(!string.IsNullOrEmpty(AlertMessage))
+			{
+				<div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
+					<div>@AlertMessage</div>
 				</div>
+			}
+		</div>
 
-				<div class="mb-3">
-					<label class="form-label"><strong>Nombres</strong></label>
-					<InputText class="form-control" @bind-Value="Jugador.Nombres" />
-					<ValidationMessage For="@(() => Jugador.Nombres)" />
-				</div>
-
-				@if(!string.IsNullOrEmpty(AlertMessage))
+		@*Footer*@
+		<div class="card-footer text-center mt-2">
+			<div class="btn-group">
+				@if (!(AlertType == "success"))
 				{
-					<div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
-						<div>@AlertMessage</div>
-					</div>
+					<button type="button" @onclick="Guardar" class="btn btn-outline-success bi bi-check-circle"> Guardar</button>
 				}
-			</div>
-
-			@*Footer*@
-			<div class="card-footer text-center mt-2">
-				<div class="btn-group">
-					@if (!(AlertType == "success"))
-					{
-						<button type="submit" class="btn btn-outline-success bi bi-check-circle"> Guardar</button>
-					}
-					<a href="/jugadores/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
-				</div>
+				<a href="/jugadores/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 			</div>
 		</div>
 	</div>
-</EditForm>
+</div>
 
 @code {
-	public Jugadores Jugador { get; set; } = new Jugadores();
 	public string AlertMessage { get; set; }
 	public string AlertType { get; set; }
 
+	public string nombres { get; set; }
+	public string email { get; set; }
+
 	public async Task Guardar()
 	{
-		var creado = await jugadoresService.Guardar(Jugador);
-		if (creado)
+		var creado = await jugadoresService.PostJugadores(nombres, email);
+		if (creado is Resource<JugadorResponse>.Success)
 		{
 			AlertMessage = "Jugador creado exitosamente.";
 			AlertType = "success";
 		}
-		else
+		else if (creado is Resource<JugadorResponse>.Error)
 		{
 			AlertMessage = "Error al crear el jugador.";
 			AlertType = "danger";
