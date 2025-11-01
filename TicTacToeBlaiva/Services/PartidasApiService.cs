@@ -49,4 +49,23 @@ public class PartidasApiService(HttpClient httpClient) : IPartidasApiService
             return new Resource<PartidaResponse>.Error("Respuesta inválida del servidor.");
         }
     }
+
+    public async Task<Resource<PartidaResponse>> PutPartida(int partidaId, int jugador1, int? jugador2)
+    {
+        var request = new PartidaRequest(jugador1, jugador2);
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync($"api/Partidas/{partidaId}", request);
+            response.EnsureSuccessStatusCode();
+            return new Resource<PartidaResponse>.Success(null!);
+        }
+        catch (HttpRequestException ex)
+        {
+            return new Resource<PartidaResponse>.Error($"Error de red: {ex.Message}");
+        }
+        catch (NotSupportedException)
+        {
+            return new Resource<PartidaResponse>.Error("Respuesta inválida del servidor.");
+        }
+    }
 }

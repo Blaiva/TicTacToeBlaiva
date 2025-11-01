@@ -13,6 +13,7 @@
 
 <div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
     <div class="game-container">
+        <h1 class="card-title">Partida #@PartidaId</h1>
         <h2 class="game-status">@GameStatus</h2>
         <div class="game-screen">
             <div class="game-board">
@@ -57,6 +58,7 @@
     {
         await CargarTablero();
         winner = CheckForWinner();
+        esEmpate = board.All(cell => cell != null);
         await CargarNombres();
     }
 
@@ -81,7 +83,7 @@
     {
         get
         {
-            if (winner != null) return $"🏆 ¡Ganador: {(_currentPlayerType == PlayerType.X ? NombreJugador1 : NombreJugador2)}!";
+            if (winner != null) return $"🏆 ¡Ganador: {(winner == PlayerType.X ? NombreJugador1 : NombreJugador2)}!";
             return esEmpate
                 ? "🤝 ¡Es un empate!"
                 : $"Turno de: {(_currentPlayerType == PlayerType.X ? NombreJugador1 : NombreJugador2)}";

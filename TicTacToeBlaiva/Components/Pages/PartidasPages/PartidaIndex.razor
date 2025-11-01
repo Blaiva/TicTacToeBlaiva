@@ -55,7 +55,8 @@
 					<tr>
 						<th>PartidaId</th>
 						<th>Jugador1Id</th>
-						<th>Jugador2Id</th>
+						<th>Jugador2Id</th
+						<th>Unirse</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -64,7 +65,10 @@
 						<tr>
 							<td>@partida.PartidaId</td>
 							<td>@partida.Jugador1Id</td>
-							<td>@(partida?.Jugador2Id == null ? "N/A" : @partida?.Jugador2Id)</td>
+							<td>@(partida?.Jugador2Id == null ? "N/A" : @partida?.Jugador2Id)</td
+							<td>
+								<a href="/game/@partida.PartidaId" class="btn btn-outline-primary"><span class="bi bi-play-fill"/></a>
+							</td>
 						</tr>
 					}
 				</tbody>
