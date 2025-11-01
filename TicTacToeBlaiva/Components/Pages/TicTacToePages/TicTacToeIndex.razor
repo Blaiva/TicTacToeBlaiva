@@ -70,9 +70,9 @@
     public async Task StartGame()
     {
         var creado = await partidasService.PostPartida(Jugador1Id, Jugador2Id);
-        if (creado is Resource<PartidaResponse>.Success)
+        if (creado is Resource<PartidaResponse>.Success success)
         {
-            navigationManager.NavigateTo($"/game/{Jugador1Id}/{Jugador2Id}");
+            navigationManager.NavigateTo($"/game/{success.Data.PartidaId}");
         }
         else if(creado is Resource<PartidaResponse>.Error error)
         {

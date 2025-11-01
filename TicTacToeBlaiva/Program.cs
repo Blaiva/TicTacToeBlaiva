@@ -22,6 +22,11 @@ builder.Services.AddHttpClient<IPartidasApiService, PartidasApiService>(client =
     client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
 });
 
+builder.Services.AddHttpClient<IMovimientosApiService, MovimientosApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
+});
+
 //Inyección del Service
 builder.Services.AddScoped<JugadoresService>();
 builder.Services.AddScoped<PartidasService>();
